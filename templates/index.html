@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+   <head>
+      <title>PIR Motion Camera</title>
+      <link rel="stylesheet" href='../static/style.css'/>
+   </head>
+   <body>
+      
+
+      <div class="Container">
+		<h1 class="Headline">PIR Motion Camera</h1>
+		<h3 class="Container2">Motion Camera Status = {{ camerastatus }}</h3>
+		<br>
+        <button onclick="location.href='/liveView'" value="liveView" type="button">LiveView</button>
+		<h3 class="Container2"> 
+			Camera
+         <br>
+         <button onclick="location.href='/camera/On'" value="On" type="button">ON</button>  
+         <button onclick="location.href='/camera/Off'" value="Off" type="button">OFF</button> 
+         <br>
+         Mode
+         <br>
+         <button onclick="location.href='/mode/Image'" value="Image" type="button">Image</button>
+         <button onclick="location.href='/mode/Video'" value="Video" type="button">Video</button>
+         <br>
+         Sleeptimer = {{ sleeptimer }}
+         <form action="/sleeptimer/" method="get">
+            <label for="sleeptimer">Length in seconds:</label>
+            <input type="lenght" id="lenght" name="length"><br>
+            <input type="submit" value="Submit">
+        </form>
+         <br>
+         Video Lenght = {{ videolength }}
+         <form action="/videolength/" method="get">
+            <label for="videolength">Length in seconds:</label>
+            <input type="lenght" id="lenght" name="length"><br>
+            <input type="submit" value="Submit">
+        </form>
+
+        
+
+
+
+        </h3>
+
+      </div>
+
+   </body>
+</html>
