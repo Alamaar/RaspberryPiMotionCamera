@@ -29,16 +29,9 @@ def camera_status(status):
 
     if status == "On":
         pir.when_motion = pir_motion_camera.capture_image
-    elif status == 'Off':
+    else:
         pir.when_motion = None
-    elif status == 'Image':    
-        pir.when_motion = pir_motion_camera.capture_image
-    elif status == 'Video':
-        try:
-            camera.stop_recording()
-        except:
-            pass
-        pir.when_motion = pir_motion_camera.capture_video 
+
             
 
 
@@ -46,6 +39,8 @@ def camera_status(status):
 
 @app.route("/")
 def index():
+    
+
     templateData = { 
       	'camerastatus' : camera_state,
         'videolength': pir_motion_camera.video_lenght,
@@ -62,9 +57,11 @@ def index():
 
 @app.route("/<controll>/<action>")
 def serverControll(controll, action):
-    if controll == 'camera' or controll == 'mode':
+    if controll == 'camera':
         camera_status(action)
 
+
+         
 
     return index()   
 
@@ -92,16 +89,16 @@ def sleeptime_controll():
     return index() 
 
 
+@app.route("/liveView/")
+def live_view(): 
+
+
+    
+    return index()
 
 
 def gen(camera):
     #get camera frame
-    try:
-        camera.stop_recording()
-    except:
-        pass
-
-    camera.start_recording(output, format='mjpeg')
     while True:
         with output.condition:
             output.condition.wait()
@@ -109,9 +106,8 @@ def gen(camera):
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
-@app.route('/liveView')
+@app.route('/video_feed')
 def video_feed():
-    camera_status("Off")
     return Response(gen(camera),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
@@ -138,11 +134,6 @@ if __name__ == "__main__":
 
     
     output = StreamingOutput()
-   
+    camera.start_recording(output, format='mjpeg')
 
- 
-    try:
-        app.run(host="0.0.0.0")
-    finally:
-        camera.close()    
-        
+    app.run(host="0.0.0.0")
